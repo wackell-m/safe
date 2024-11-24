@@ -1,0 +1,122 @@
+/* Global Styles */
+body {
+  background-color: black;
+  color: #00ff00;
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.message {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  animation: fade-in 0.5s;
+}
+
+.safe-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.safe {
+  width: 150px;
+  height: 150px;
+  border: 5px solid #00ff00;
+  border-radius: 50%;
+  position: relative;
+}
+
+.dial {
+  width: 100px;
+  height: 100px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  cursor: pointer;
+}
+
+.counter {
+  font-size: 2em;
+  width: 100px;
+  transform-origin: bottom;
+}
+
+button {
+  margin-top: 20px;
+  background-color: #00ff00;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #008800;
+}
+
+/* Animations */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+  }
+  50% {
+    box-shadow: 0 0 20px #00ff00, 0 0 40px #00ff00;
+  }
+}
+
+@keyframes red-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px red, 0 0 20px red;
+  }
+  50% {
+    box-shadow: 0 0 20px red, 0 0 40px red;
+  }
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(0);
+  }
+  50% {
+    transform: rotateX(90deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
+}
+
+.safe.win {
+  animation: glow 1s infinite;
+}
+
+.safe.lose {
+  animation: red-glow 1s infinite;
+}
+
+.counter.flip {
+  animation: flip 0.5s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
