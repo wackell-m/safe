@@ -49,10 +49,8 @@ function updateCounter(angle) {
 
 // Add animations and sound when the counter updates
 function updateCounterWithAnimation(angle) {
-  counter.classList.add("flip");
   playSound(dialSound);
   updateCounter(angle);
-  setTimeout(() => counter.classList.remove("flip"), 500);
 }
 
 // Show glow effects on the safe
@@ -67,7 +65,7 @@ function showSafeEffect(win) {
 }
 
 // Handle rotation
-function handleRotate(eventX, eventY, isTouch = false) {
+function handleRotate(eventX, eventY) {
   const rect = dial.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
@@ -88,19 +86,14 @@ function handleRotate(eventX, eventY, isTouch = false) {
 // Mouse events
 dial.addEventListener("mousedown", (e) => {
   e.preventDefault(); // Prevents unwanted selection
-  const startX = e.clientX;
-  const startY = e.clientY;
-
   function rotate(event) {
     handleRotate(event.clientX, event.clientY);
   }
-
   function stopRotate() {
     document.removeEventListener("mousemove", rotate);
     document.removeEventListener("mouseup", stopRotate);
     startAngle = null; // Reset start angle
   }
-
   document.addEventListener("mousemove", rotate);
   document.addEventListener("mouseup", stopRotate);
 });
@@ -109,20 +102,15 @@ dial.addEventListener("mousedown", (e) => {
 dial.addEventListener("touchstart", (e) => {
   e.preventDefault(); // Prevent scrolling
   const touch = e.touches[0];
-  const startX = touch.clientX;
-  const startY = touch.clientY;
-
   function rotate(event) {
     const touchMove = event.touches[0];
-    handleRotate(touchMove.clientX, touchMove.clientY, true);
+    handleRotate(touchMove.clientX, touchMove.clientY);
   }
-
   function stopRotate() {
     document.removeEventListener("touchmove", rotate);
     document.removeEventListener("touchend", stopRotate);
     startAngle = null; // Reset start angle
   }
-
   document.addEventListener("touchmove", rotate);
   document.addEventListener("touchend", stopRotate);
 });
