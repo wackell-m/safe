@@ -19,6 +19,22 @@ const code = [68, 21, 83];
 const userInput = [];
 let startAngle = null;
 
+// Confetti effect
+function createConfetti() {
+  const confettiCount = 100;
+  for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+    confetti.style.left = `${Math.random() * 100}vw`;
+    confetti.style.animationDuration = `${Math.random() * 2 + 3}s`;
+    confetti.style.animationDelay = `${Math.random()}s`;
+    document.body.appendChild(confetti);
+
+    // Remove confetti after animation ends
+    confetti.addEventListener("animationend", () => confetti.remove());
+  }
+}
+
 // Play a sound
 function playSound(sound) {
   sound.currentTime = 0;
@@ -44,6 +60,7 @@ function showSafeEffect(win) {
   safe.classList.remove("win", "lose");
   if (win) {
     safe.classList.add("win");
+    createConfetti(); // Trigger confetti on win
   } else {
     safe.classList.add("lose");
   }
