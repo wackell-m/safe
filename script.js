@@ -17,6 +17,7 @@ let currentNumber = 0;
 let codeIndex = 0;
 const code = [68, 21, 83];
 const userInput = [];
+let startAngle = null;
 
 // Play a sound
 function playSound(sound) {
@@ -48,27 +49,65 @@ function showSafeEffect(win) {
   }
 }
 
-// Rotate the dial and update the counter
+// Handle rotation
+function handleRotate(eventX, eventY, isTouch = false) {
+  const rect = dial.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  const dx = eventX - centerX;
+  const dy = eventY - centerY;
+  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+  if (startAngle === null) {
+    startAngle = angle - currentAngle;
+  }
+
+  currentAngle = angle - startAngle;
+  dial.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
+  updateCounterWithAnimation(currentAngle);
+}
+
+// Mouse events
 dial.addEventListener("mousedown", (e) => {
-  const startAngle = currentAngle;
+  e.preventDefault(); // Prevents unwanted selection
   const startX = e.clientX;
   const startY = e.clientY;
 
   function rotate(event) {
-    const dx = event.clientX - startX;
-    const dy = event.clientY - startY;
-    currentAngle = startAngle + Math.atan2(dy, dx) * (180 / Math.PI);
-    dial.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
-    updateCounterWithAnimation(currentAngle);
+    handleRotate(event.clientX, event.clientY);
   }
 
   function stopRotate() {
     document.removeEventListener("mousemove", rotate);
     document.removeEventListener("mouseup", stopRotate);
+    startAngle = null; // Reset start angle
   }
 
   document.addEventListener("mousemove", rotate);
   document.addEventListener("mouseup", stopRotate);
+});
+
+// Touch events for mobile
+dial.addEventListener("touchstart", (e) => {
+  e.preventDefault(); // Prevent scrolling
+  const touch = e.touches[0];
+  const startX = touch.clientX;
+  const startY = touch.clientY;
+
+  function rotate(event) {
+    const touchMove = event.touches[0];
+    handleRotate(touchMove.clientX, touchMove.clientY, true);
+  }
+
+  function stopRotate() {
+    document.removeEventListener("touchmove", rotate);
+    document.removeEventListener("touchend", stopRotate);
+    startAngle = null; // Reset start angle
+  }
+
+  document.addEventListener("touchmove", rotate);
+  document.addEventListener("touchend", stopRotate);
 });
 
 // Handle submit button clicks
